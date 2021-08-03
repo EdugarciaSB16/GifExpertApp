@@ -14,7 +14,7 @@ const AddCategory = ({ setCategories }) => {
 
         if( inputValue.trim().length > 2 ){
             setCategories( prevState => {
-                return [...prevState, inputValue]
+                return [inputValue, ...prevState]
             })
             setInputValue('')
         }

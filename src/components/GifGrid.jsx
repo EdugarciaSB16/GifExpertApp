@@ -1,42 +1,25 @@
-import {useEffect, useState} from 'react';
 import GifGridItem from './GifGridItem';
+import { useFetchGifs } from '../hooks/useFetchGifs';
 
 const GifGrid = ({ category }) => {
 
-    const [gifs, setGifs] = useState([])
-    
-    useEffect(() =>{
-        getGifs()
-    }, [])
+    const { data:gifs, loading } = useFetchGifs( category )
 
-    const getGifs = async () => {
-
-        const url = `https://api.giphy.com/v1/gifs/search?q=one+piece&api_key=pCJoVCalWZSXhpiLdTgKOEBDqCCzvOKN&limit=5`
-        const res = await fetch( url )
-        const { data } = await res.json()
-
-        const gifsData = data.map( img => {
-            return {
-                id : img.id,
-                title : img.title,
-                url : img.images.downsized_medium.url
-            }
-        })
-
-        setGifs(gifsData)
-    }
-
-    console.log(gifs)
 
     return (
-        <div>
-            <h3>{category}</h3>
+        <>
+            <h3 className="animate__animated animate__fadeInDown">{category}</h3>
+            {
+                loading && <p className="animate__animated animate__flash">Loading...</p>
+            }
+            <div className="card-grid">
                 {
-                    gifs.map( gif => (
-                        <GifGridItem key={gif.id} {...gif}/>
+                    gifs.map(gif => (
+                        <GifGridItem key={gif.id} {...gif} />
                     ))
                 }
-        </div>
+            </div>
+        </>
     );
 };
 
